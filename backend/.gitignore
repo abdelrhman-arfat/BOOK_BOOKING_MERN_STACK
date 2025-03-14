@@ -1,0 +1,79 @@
+# Node.js dependencies
+node_modules/
+.pnpm-debug.log*
+.pnp.*
+
+# Logs & Debugging
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Build & Output
+build/
+dist/
+out/
+.next/
+.nuxt/
+.docusaurus/
+.serverless/
+
+# Cache & Temporary Files
+.cache/
+.parcel-cache/
+.temp/
+.nyc_output/
+coverage/
+*.lcov
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# TypeScript
+*.tsbuildinfo
+
+# Package Managers
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# REPL History
+.node_repl_history
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Miscellaneous
+bower_components/
+jspm_packages/
+web_modules/
+.vscode-test/
+.tern-port
+.dynamodb/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.sublime-workspace
+.DS_Store
+Thumbs.db
