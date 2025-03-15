@@ -1,6 +1,6 @@
-# 🚀 CRUD MERN Stack Project
+# 🚀 Booking MERN Stack Project
 
-A simple CRUD application built with MongoDB, Express.js, React, and Node.js.
+A simple Booking books application built with MongoDB, Express.js, React, and Node.js.
 
 ## 📌 Features
 
