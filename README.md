@@ -57,6 +57,11 @@ CLOUDINARY_KEY = ...
 CLOUDINARY_SECRET = ...
 
 ```
+Create a `.env` file in the frontend folder and add:
+
+```
+API_URL =...
+```
 
 ### 4️⃣ Run the Project
 
