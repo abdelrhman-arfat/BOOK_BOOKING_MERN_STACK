@@ -4,7 +4,7 @@ import { app } from "@/app/Api/axiosInstance";
 import { useAppDispatch } from "@/app/hooks/AppDispatch";
 import useUserSelector from "@/app/hooks/AppSelectors";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const RefreshToken = () => {
   const dispatch = useAppDispatch();
@@ -12,24 +12,24 @@ const RefreshToken = () => {
 
   useEffect(() => {
     const handler = setInterval(async () => {
-      if (!Cookies.get("refreshToken")) {
-        dispatch(logout());
-        return;
-      }
       try {
         app
           .post("users/refresh")
           .then((response) => {
-            dispatch(setCredentials(response.data.data.user));
-            return response.data;
+            if (response.status !== 200) {
+              dispatch(logout());
+              return;
+            }
+            dispatch(setCredentials(response.data.data.results));
+            return;
           })
-          .catch((error) => {
-            return error;
+          .catch(() => {
+            dispatch(logout());
           });
       } catch {
-        dispatch(logout());
+        console.log("Failed to refresh token");
       }
-    }, 1000 * 60 * 10);
+    }, 1000 * 60 * 10); // after 10 minutes .
 
     return () => clearInterval(handler);
   }, [dispatch, userInfo]);

@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/app/hooks/AppDispatch";
 import { setCredentials } from "@/app/_RTK/redux-slices/authSlice";
 import Loader from "../loaders/Loader";
 import Swal from "sweetalert2";
+import { userRoles } from "@/app/constant/userRoles";
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
 
@@ -27,12 +28,9 @@ const LoginForm = () => {
         email,
         password,
       });
-
-      const data = await res.data;
-
+      const data = await res.data.data;
       setIsLoading(false);
-
-      if (!data.success) {
+      if (!res.data.success) {
         Swal.fire({
           title: "Wrong",
           text: data.message,
@@ -41,9 +39,28 @@ const LoginForm = () => {
         });
         return;
       }
-      const user = data.user;
+
+      const user = data.results;
 
       if (!user) return;
+      if (!user.isVerified) {
+        Swal.fire({
+          title: "Wrong",
+          text: "Your account is not verified",
+          icon: "error",
+          draggable: false,
+        }).then(() => {
+          app.post(`users/send-verification-email/${user._id}`).then((res) => {
+            Swal.fire({
+              title: "Verification Email Sent",
+              text: res?.data.message,
+              icon: "success",
+              draggable: false,
+            });
+          });
+        });
+        return;
+      }
       dispatch(setCredentials(user));
 
       Swal.fire({
@@ -51,7 +68,7 @@ const LoginForm = () => {
         icon: "success",
         draggable: true,
       }).then(() => {
-        if (user.role !== "USER") {
+        if (user.role !== userRoles.USER) {
           return router.replace("/admin/dashboard");
         }
 

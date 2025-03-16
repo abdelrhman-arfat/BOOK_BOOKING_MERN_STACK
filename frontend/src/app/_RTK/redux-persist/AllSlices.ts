@@ -1,7 +1,7 @@
 // collect all reducers in one reducers :
 import { combineReducers } from "redux";
-import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer } from "redux-persist";
+import storageSession from "redux-persist/lib/storage/session";
 import { userData } from "../RTK-query/query";
 import authSlice from "../redux-slices/authSlice";
 const allReducers = combineReducers({

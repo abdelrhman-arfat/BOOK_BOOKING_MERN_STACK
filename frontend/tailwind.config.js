@@ -1,4 +1,6 @@
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+const tailwindConfig = {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -7,10 +9,9 @@ module.exports = {
         third: "#F8E7F6",
         forth: "#F5F5F5",
       },
-      fontFamily: {
-        sans: ["Helvetica", "Arial", "sans-serif"],
-      },
     },
   },
   plugins: [],
 };
+
+export default tailwindConfig;

@@ -23,11 +23,12 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "uploads",
-    transformation: [{ width: 200, height: 200, crop: "fill" }],
   },
 });
 // -------------------------------- Multer storage configuration -------------------------------------
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+});
 
 export { upload, cloudinary };

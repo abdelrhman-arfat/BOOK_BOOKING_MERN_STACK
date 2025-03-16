@@ -39,29 +39,24 @@ const SignUpForm = () => {
       })
       .then((res) => {
         setIsLoading(false);
-        if (res.status === 200) {
-          dispatch(setCredentials(res.data.data.user));
+        if (res.status !== 200) {
           Swal.fire({
             title: res.data.message,
-            text: "Please check your email to verify your account",
-
-            icon: "success",
-            draggable: true,
-          }).then(() => {
-            if (res.data.data.user.role !== "USER") {
-              return router.replace("/admin/dashboard");
-            }
-
-            router.replace("/");
+            text: "Please try again",
+            icon: "error",
+            draggable: false,
           });
-
-          return;
         }
+        dispatch(setCredentials(res.data.data.results));
         Swal.fire({
           title: res.data.message,
-          text: "Please try again",
-          icon: "error",
-          draggable: false,
+          text: "Please check your email to verify your account",
+
+          icon: "success",
+          draggable: true,
+        }).then(() => {
+          router.replace("/login");
+          return;
         });
       })
       .catch((err) => {

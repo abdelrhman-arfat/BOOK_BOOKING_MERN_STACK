@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { userRoles } from "../utils/userRole.js";
 import { validationResult } from "express-validator";
-import { sendVerificationEmail } from "../func/sendVerificationEmail.js";
+import { sendVerificationEmailWhenSign } from "../func/sendVerificationEmail.js";
 // import { validationResult } from "express-validator";
 
 const getAllUsers = async (req, res, next) => {
@@ -32,9 +32,9 @@ const getAllUsers = async (req, res, next) => {
   res.status(200).json({
     message: "Users fetched successfully",
     data: {
-      Users,
+      results: Users,
     },
-    totalUsers,
+    total: totalUsers,
     currentPage: +page,
     totalPages: Math.ceil(totalUsers / limit),
     error: null,
@@ -74,7 +74,7 @@ const handleNewUser = async (req, res, next) => {
     delete userResponse.password;
     delete userResponse.__v;
 
-    await sendVerificationEmail(userResponse);
+    await sendVerificationEmailWhenSign(userResponse);
 
     const token = await createAccessToken(
       {
@@ -115,7 +115,7 @@ const handleNewUser = async (req, res, next) => {
     res.status(200).json({
       message: "user Sign up successfully",
       data: {
-        user: userResponse,
+        results: userResponse,
       },
       error: null,
     });
@@ -147,9 +147,19 @@ const verificationEmail = async (req, res, next) => {
     return next(createError({ message: "user not found", statusCode: 404 }));
   }
 
+  const userResponse = user.toObject();
+  delete userResponse.password;
+  delete userResponse.__v;
+
   await user.save();
 
-  res.status(200).json({ message: "Email verified! You can now log in." });
+  res
+    .status(200)
+    .json({
+      success: true,
+      data: { results: userResponse },
+      message: "Email verified! You can now log in.",
+    });
 };
 // when login or when refresh token expired
 const handleLogin = async (req, res, next) => {
@@ -234,9 +244,13 @@ const handleLogin = async (req, res, next) => {
 
   delete userResponse.__v;
 
-  return res
-    .status(200)
-    .json({ user: userResponse, success: true, message: "Login successful" });
+  return res.status(200).json({
+    data: {
+      results: userResponse,
+    },
+    success: true,
+    message: "Login successful",
+  });
 };
 
 const handleLogOut = (req, res) => {
@@ -300,7 +314,7 @@ const refreshToken = async (req, res, next) => {
   });
   res.status(200).json({
     data: {
-      user,
+      results: user,
     },
     success: true,
     message: "Access token refreshed",

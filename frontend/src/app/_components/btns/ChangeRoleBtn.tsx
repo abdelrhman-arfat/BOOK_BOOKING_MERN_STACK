@@ -1,4 +1,3 @@
-import { useGetAllUsersQuery } from "@/app/_RTK/RTK-query/query";
 import { app } from "@/app/Api/axiosInstance";
 import { userRoles } from "@/app/constant/userRoles";
 import React, { memo } from "react";
@@ -12,7 +11,15 @@ const swalWithBootstrapButtons = Swal.mixin({
   buttonsStyling: true,
 });
 
-const ChangeRoleBtn = ({ id, role }: { role: string; id: string }) => {
+const ChangeRoleBtn = ({
+  refetch,
+  id,
+  role,
+}: {
+  refetch: () => void;
+  role: string;
+  id: string;
+}) => {
   const roles = [
     userRoles.USER,
     userRoles.ADMIN,
@@ -20,10 +27,8 @@ const ChangeRoleBtn = ({ id, role }: { role: string; id: string }) => {
     userRoles.LEADER,
   ];
 
-  const { refetch } = useGetAllUsersQuery();
   return (
     <select
-    defaultValue=""
       onChange={(e) => {
         if (!e.target.value) return;
         swalWithBootstrapButtons
@@ -52,6 +57,7 @@ const ChangeRoleBtn = ({ id, role }: { role: string; id: string }) => {
                       draggable: true,
                     });
                     refetch();
+                    e.target.value = "";
                     return;
                   }
                   console.log(res);
@@ -80,7 +86,7 @@ const ChangeRoleBtn = ({ id, role }: { role: string; id: string }) => {
       name="role"
       id=""
     >
-      <option value="" disabled >
+      <option value="" selected disabled>
         Select Role
       </option>
       {roles.map(

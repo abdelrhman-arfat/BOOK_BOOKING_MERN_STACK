@@ -5,6 +5,7 @@ export const connectToDB = async function () {
   try {
     // eslint-disable-next-line no-undef
     await mongoose.connect(process.env.MONGO_URL);
+    console.log("Connected to MongoDB");
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
     throw error;

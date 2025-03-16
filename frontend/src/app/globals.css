@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 .loader {
   animation: loader infinite 3s;
   border-radius: 50%;
@@ -30,5 +29,5 @@
 }
 
 .btn {
-  @apply px-2 py-1 rounded-md
+  @apply px-1 py-0.5 sm:px-2 sm:py-1 rounded-md
 }

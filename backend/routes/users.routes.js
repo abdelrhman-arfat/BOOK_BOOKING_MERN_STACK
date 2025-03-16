@@ -18,6 +18,7 @@ import { loginValidator } from "../validator/loginValidator.js";
 import { upload } from "../config/cloudinaryConfig.js";
 import { accessSuperAdminWork } from "../middleware/accessSuperAdminWorks.js";
 import { accessForVerified } from "../middleware/IfVerified.js";
+import { sendVerificationEmailWhenOrder } from "../func/sendVerificationWithOrder.js";
 
 const router = new Router();
 
@@ -47,6 +48,10 @@ router
 
     upload.single("image"),
     asyncWrapper(handleUpdatePhoto)
+  )
+  .post(
+    "/send-verification-email/:user_id",
+    asyncWrapper(sendVerificationEmailWhenOrder)
   );
 
 router.delete(

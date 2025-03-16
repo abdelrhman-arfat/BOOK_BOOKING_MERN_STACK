@@ -1,7 +1,6 @@
 "use client";
 import Swal from "sweetalert2";
 import { app } from "@/app/Api/axiosInstance";
-import { useGetAllUsersQuery } from "@/app/_RTK/RTK-query/query";
 import { memo } from "react";
 
 const swalWithBootstrapButtons = Swal.mixin({
@@ -12,9 +11,13 @@ const swalWithBootstrapButtons = Swal.mixin({
   buttonsStyling: true,
 });
 
-const DeleteUserBtn = ({ id }: { id: string }) => {
-  const { refetch } = useGetAllUsersQuery();
-
+const DeleteUserBtn = ({
+  refetch,
+  id,
+}: {
+  refetch: () => void;
+  id: string;
+}) => {
   const handelDeleteUser = () => {
     swalWithBootstrapButtons
       .fire({
@@ -30,13 +33,21 @@ const DeleteUserBtn = ({ id }: { id: string }) => {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          app.delete(`users/${id}`).then(() => {
+          app.delete(`users/${id}`).then((res) => {
+            if (res.status === 200) {
+              swalWithBootstrapButtons.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+              refetch();
+              return;
+            }
             swalWithBootstrapButtons.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
+              title: "Wrong!",
+              text: "You can't delete this user.",
+              icon: "error",
             });
-            refetch();
           });
         } else if (
           /* Read more about handling dismissals below */

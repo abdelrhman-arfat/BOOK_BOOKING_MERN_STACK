@@ -12,11 +12,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="w-screen flex gap-4 items-center ">
-      <aside className="bg-green-50 sm:w-[190px]">
+    <main className="w-screen flex md:gap-4 items-center ">
+      <aside className="bg-green-50 md:w-[190px]">
         <SideBar />
       </aside>
-      <div className="px-4 py-1 w-full ">{children}</div>
+      <div className="md:px-4 py-1 w-full ">{children}</div>
     </main>
   );
 }

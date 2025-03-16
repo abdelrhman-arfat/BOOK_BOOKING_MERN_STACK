@@ -1,10 +1,24 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import { createError } from "../utils/createError.js";
+import { User } from "../db/user.schema.js";
 dotenv.config();
 
-const sendVerificationEmailWhenSign = async (user) => {
-  
+const sendVerificationEmailWhenOrder = async (req, res, next) => {
+  const id = req.params.user_id || req.query.user_id;
+
+  if (!id) {
+    return next(
+      createError({ message: "User ID not provided", statusCode: 400 })
+    );
+  }
+  const user = await User.findById(id);
+
+  if (!user) {
+    return next(createError({ message: "User not found", statusCode: 404 }));
+  }
+
   const token = await jwt.sign(
     { userId: user._id, role: user.role },
     // eslint-disable-next-line no-undef
@@ -41,6 +55,10 @@ const sendVerificationEmailWhenSign = async (user) => {
       </div>
     `,
   });
+
+  res.status(200).json({
+    message: "Verification email sent successfully",
+  });
 };
 
-export { sendVerificationEmailWhenSign };
+export { sendVerificationEmailWhenOrder };

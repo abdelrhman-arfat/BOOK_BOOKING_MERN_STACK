@@ -10,7 +10,7 @@ const SideBar = () => {
   return (
     <div className="fixed top-0 left-0 z-50">
       <button
-        className="fixed text-3xl sm:opacity-0 bottom-3 right-3 z-50 w-[40px] h-[40px] rounded-full centered shadow-md bg-gray-100"
+        className="fixed text-3xl md:opacity-0 bottom-3 right-3 z-50 w-[40px] h-[40px] rounded-full centered shadow-md bg-gray-100"
         aria-label="menu"
         onClick={() => setIsOpen((p: boolean) => !p)}
       >
@@ -19,10 +19,10 @@ const SideBar = () => {
       <div
         className={`absolute bg-white w-[180px] z-40 ${
           isOpen ? "-translate-x-0" : "-translate-x-[200px]"
-        } sm:translate-x-0    duration-300 h-screen border-r  `}
+        } md:translate-x-0 duration-300 h-screen border-r  `}
       >
         <div>
-          <h1 className="centered py-3 text-center bg-[#4B164C] text-white duration-300 shadow-sm">
+          <h1 className="centered py-3 bg-purple-700 text-center text-white duration-300 shadow-sm">
             Logo
           </h1>
         </div>

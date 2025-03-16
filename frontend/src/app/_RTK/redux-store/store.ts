@@ -1,15 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userData } from "../RTK-query/query";
 import { persistReduced } from "../redux-persist/AllSlices";
-import {
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from "redux-persist";
-import persistStore from "redux-persist/es/persistStore";
+
+// solve import Error :
+const FLUSH: string = "persist/FLUSH";
+const REHYDRATE: string = "persist/REHYDRATE";
+const PAUSE: string = "persist/PAUSE";
+const PERSIST: string = "persist/PERSIST";
+const PURGE: string = "persist/PURGE";
+const REGISTER: string = "persist/REGISTER";
+
+import { persistStore } from "redux-persist";
 const store = configureStore({
   reducer: persistReduced,
   middleware: (getDefaultMiddleware) =>
@@ -20,7 +21,6 @@ const store = configureStore({
     }).concat(userData.middleware),
   devTools: process.env.NODE_ENV === "development",
 });
-
 
 export const persistor = persistStore(store);
 

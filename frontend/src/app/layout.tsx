@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "./globals.css";
+import "../app/globals.css";
 import { AppProvider } from "./_RTK/provider/AppProvider";
 
 const roboto = Roboto({

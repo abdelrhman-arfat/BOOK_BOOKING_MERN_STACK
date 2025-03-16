@@ -5,6 +5,7 @@ import { connectToDB } from "./db/connectToDB.js";
 import { ErrorHandler } from "./middleware/ErrorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { productRouter } from "./routes/product.routes.js";
 // import { productRouter } from "./routes/product.routes.js";
 
 dotenv.config();
@@ -13,7 +14,11 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 
 const app = express();
+
 app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 app.use(
@@ -41,6 +46,7 @@ app.use(
 app.use("/api/users", userRouter);
 
 // 2 - products
+app.use("/api/products", productRouter);
 
 // app.use("/api/products", productRouter);
 

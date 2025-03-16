@@ -2,7 +2,14 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    minLength: 2,
+    required: true,
+  },
+  author_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  image: {
+    type: String,
     required: true,
   },
   description: {
@@ -15,18 +22,12 @@ const productSchema = new mongoose.Schema({
   },
   rate: {
     type: Number,
-    min: 1,
-    max: 5,
+    default: 0,
     required: true,
   },
   quantity: {
     type: Number,
-    min: 1,
-    required: true,
-  },
-  category: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Category",
+    default: 1,
     required: true,
   },
 });

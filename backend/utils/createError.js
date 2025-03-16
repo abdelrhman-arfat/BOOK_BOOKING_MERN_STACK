@@ -1,6 +1,7 @@
 export const createError = (error) => {
   return {
-    statusCode: error.statusCode,
-    message: error.message,
+    data: null,
+    statusCode: error.statusCode || 500,
+    message: error.message || "An error occurred, please try again later",
   };
 };

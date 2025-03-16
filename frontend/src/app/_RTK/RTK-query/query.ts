@@ -8,8 +8,9 @@ export const userData = createApi({
     credentials: "include",
   }),
   endpoints: (build) => ({
-    getAllUsers: build.query<TAllUsers, void>({
-      query: () => `users`,
+    getAllUsers: build.query<TAllUsers, number>({
+      query: (page?: number, limit?: number) =>
+        `users?page=${page || 1}&limit=${limit || 10}`,
     }),
   }),
 });
