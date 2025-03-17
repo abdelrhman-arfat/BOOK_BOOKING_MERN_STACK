@@ -47,20 +47,31 @@ Create a `.env` file in the backend folder and add:
 ```
 
 MONGO_URI= ...
+
 JWT_SECRET= ...
 REFRESH_SECRETE= ...
 
 PORT=3003 or ...
 
+CLIENT_URL = ...
+
 CLOUDINARY_NAME = ...
 CLOUDINARY_KEY = ...
 CLOUDINARY_SECRET = ...
+
+EMAIL_USER = ....@...com
+EMAIL_PASS = .... .... .... ....
+
+CLINET_ID= ...
+CLINET_SECRET = ...
 
 ```
 Create a `.env` file in the frontend folder and add:
 
 ```
+
 API_URL =...
+
 ```
 
 ### 4️⃣ Run the Project
@@ -68,25 +79,16 @@ API_URL =...
 #### Backend
 
 ```bash
+cd backend
 npm run dev
 ```
 
 #### Frontend
 
 ```bash
+cd frontend
 npm run dev
 ```
-
-## 📬 API Endpoints
-
-| Method | Endpoint | Description |
-| ------ | -------- | ----------- |
-
-well be write later
-
-## 📷 Screenshots
-
-_Add images here if you have a UI_
 
 ---
 
