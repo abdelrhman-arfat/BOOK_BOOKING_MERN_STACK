@@ -96,7 +96,7 @@ const BookCard = ({
                   });
                 return;
               }}
-              className="rounded-full cursor-pointer w-[40px] duration-100 h-[40px] shadow-sm bg-gray-100 flex items-center justify-center text-xl sm:text-2xl"
+              className="rounded-full cursor-pointer w-[40px] h-[40px] shadow-sm bg-gray-100 flex items-center justify-center text-xl sm:text-2xl"
             >
               <FaHeart />
             </button>
