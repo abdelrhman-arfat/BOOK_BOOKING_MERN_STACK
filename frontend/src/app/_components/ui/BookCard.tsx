@@ -77,25 +77,23 @@ const BookCard = ({
                 color: isFav ? "red" : "black",
                 scale: isFav ? "1.12" : "1",
               }}
-              onClick={async () => {
-                const res = await app.post(`favorites/${book._id}`);
-                if (res.status !== 200) {
-                  Swal.fire({
-                    title: "Authentication Required",
-                    text: "Please login , if you login verification your account from settings",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: false,
+              onClick={() => {
+                app
+                  .post(`favorites/${book._id}`)
+                  .then(() => {
+                    refetchFav();
+                    refetchBooks();
+                    Toast.fire({
+                      icon: "success",
+                      title: "Updated in successfully",
+                    });
+                  })
+                  .catch(() => {
+                    Toast.fire({
+                      icon: "error",
+                      title: "Failed to update in favorite",
+                    });
                   });
-                  return;
-                }
-                refetchFav();
-                refetchBooks();
-                Toast.fire({
-                  icon: "success",
-                  title: "Updated in successfully",
-                });
                 return;
               }}
               className="rounded-full cursor-pointer w-[40px] duration-100 h-[40px] shadow-sm bg-gray-100 flex items-center justify-center text-xl sm:text-2xl"
