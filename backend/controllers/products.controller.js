@@ -3,7 +3,7 @@ import { createError } from "../utils/createError.js";
 import { ObjectId } from "mongodb";
 
 const getAllProducts = async (req, res, next) => {
-  const { page = 1, limit = 15 } = req.query || req.params;
+  const { page = 1, limit = 12 } = req.query || req.params;
   const skip = (page - 1) * limit;
 
   const [products, totalProducts] = await Promise.all([

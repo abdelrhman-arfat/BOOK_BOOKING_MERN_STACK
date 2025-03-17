@@ -13,7 +13,7 @@ import { sendVerificationEmailWhenSign } from "../func/sendVerificationEmail.js"
 // import { validationResult } from "express-validator";
 
 const getAllUsers = async (req, res, next) => {
-  const { page = 1, limit = 15 } = req.query || req.params;
+  const { page = 1, limit = 12 } = req.query || req.params;
 
   const skip = (page - 1) * limit;
 
@@ -162,6 +162,51 @@ const verificationEmail = async (req, res, next) => {
   delete userResponse.__v;
 
   await user.save();
+
+  const accessToken = await createAccessToken(
+    {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      _id: user._id,
+      profilePicture: user.profilePicture,
+      role: user.role,
+      isVerified: user.isVerified,
+    },
+    next
+  );
+
+  const refreshToken = await createRefreshToken(
+    {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      _id: user._id,
+      profilePicture: user.profilePicture,
+
+      role: user.role,
+      isVerified: user.isVerified,
+    },
+    next
+  );
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    // eslint-disable-next-line no-undef
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
+  });
+
+  res.cookie("token", accessToken, {
+    httpOnly: true,
+    // eslint-disable-next-line no-undef
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 15 * 60 * 1000, // 15 min
+  });
 
   res.status(200).json({
     success: true,

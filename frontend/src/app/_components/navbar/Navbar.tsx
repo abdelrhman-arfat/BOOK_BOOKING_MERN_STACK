@@ -7,7 +7,7 @@ const Navbar = () => {
     <header className="w-screen h-[90px] ">
       <nav className="w-[90%] h-full flex items-center justify-between mx-auto ">
         <Link className="text-2xl" href={"/"}>
-          Book
+          Book <span className="text-sm">hub</span>
         </Link>
 
         <div>

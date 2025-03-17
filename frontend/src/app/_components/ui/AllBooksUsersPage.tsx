@@ -28,7 +28,7 @@ const AllBooksUsersPage = () => {
     fav?.data?.data?.results.map((favBook) => favBook.book_id) || [];
   return (
     <div>
-      <div className="flex w-full justify-between items-center">
+      <div className="flex my-3 w-full justify-between items-center">
         <PageBtn
           refetch={getBooks.refetch}
           totalPages={getBooks?.data?.totalPages || 1}

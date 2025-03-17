@@ -31,6 +31,8 @@ const BookCard = ({
     <div className="max-w-[300px] mx-auto sm:mx-0 sm:max-w-full min-w-[300px] sm:min-w-[200px] bg-white border border-gray-200 rounded-lg shadow-sm">
       <div className="min-w-[200px] h-[200px] relative">
         <Image
+          loading="lazy"
+          sizes="100%"
           fill
           className="rounded-t-lg"
           src={book.image}
@@ -61,9 +63,9 @@ const BookCard = ({
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
@@ -80,7 +82,7 @@ const BookCard = ({
                 if (res.status !== 200) {
                   Swal.fire({
                     title: "Authentication Required",
-                    text: "Please login to add favorite books",
+                    text: "Please login , if you login verification your account from settings",
                     icon: "error",
                     showConfirmButton: false,
                     timer: 2000,

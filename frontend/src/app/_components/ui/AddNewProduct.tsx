@@ -11,12 +11,10 @@ const AddNewProduct = ({ refetch }: { refetch: () => void }) => {
     setLoader(true);
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title");
-    const price = formData.get("price");
     const description = formData.get("description");
     const image = formData.get("image");
-    const quantity = formData.get("quantity");
     const book_url = formData.get("book_url");
-    if (!title || !book_url || !description || !image || !price || !quantity) {
+    if (!title || !book_url || !description || !image) {
       Swal.fire({
         title: "Error",
         text: "Please fill all the fields",
@@ -30,8 +28,6 @@ const AddNewProduct = ({ refetch }: { refetch: () => void }) => {
         "products",
         {
           title,
-          price: +price,
-          quantity: +quantity,
           description,
           image,
           book_url,

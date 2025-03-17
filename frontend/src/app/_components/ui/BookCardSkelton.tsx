@@ -10,7 +10,7 @@ const BookCardSkelton = () => {
         <p className="mb-3 min-h-[60px] animate-pluse bg-gray-400 font-normal line-clamp-2 text-gray-700"></p>
         <div className="flex bg-gray-400 animate-pulse justify-between items-center">
           <div>
-            <p className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none bg-pink-600 ">
+            <p className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none animate-pulse bg-gray-400 ">
               Download
               <svg
                 className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
@@ -21,9 +21,9 @@ const BookCardSkelton = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
