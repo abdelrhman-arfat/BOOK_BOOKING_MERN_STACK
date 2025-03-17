@@ -1,12 +1,13 @@
 import { TUser } from "@/app/types/User";
 import Image from "next/image";
-import DeleteUserBtn from "../btns/DeleteUserBtn";
 import ChangeRoleBtn from "../btns/ChangeRoleBtn";
 import useUserSelector from "@/app/hooks/AppSelectors";
 import { userRoles } from "@/app/constant/userRoles";
+import DeleteItemBtn from "../btns/DeleteItemBtn";
 
 const UserCard = ({ user, refetch }: { refetch: () => void; user: TUser }) => {
   const loginUser = useUserSelector();
+
   return (
     <div className="flex w-full flex-col justify-center items-center ">
       <div className="mx-auto flex w-full flex-col justify-center px-5 pt-0 md:h-[unset]  xl:pl-0">
@@ -50,7 +51,7 @@ const UserCard = ({ user, refetch }: { refetch: () => void; user: TUser }) => {
             ) : loginUser.user?.role === userRoles.SUPERADMIN ||
               loginUser.user?.role === userRoles.LEADER ? (
               <div className="flex w-full mt-4 items-center px-2 sm:px-4 justify-between py-2">
-                <DeleteUserBtn refetch={refetch} id={user._id} />
+                <DeleteItemBtn text="user" refetch={refetch} id={user._id} />
                 <ChangeRoleBtn
                   refetch={refetch}
                   role={user.role}

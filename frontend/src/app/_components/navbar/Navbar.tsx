@@ -1,15 +1,18 @@
 import React from "react";
+import UserInfo from "../ui/UserInfo";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
     <header className="w-screen h-[90px] ">
       <nav className="w-[90%] h-full flex items-center justify-between mx-auto ">
-        <h1>logo</h1>
-        <ul className="flex justify-between items-center gap-6">
-          <li>Home</li>
-          <li>About</li>
-          <li>Contact</li>
-        </ul>
+        <Link className="text-2xl" href={"/"}>
+          Book
+        </Link>
+
+        <div>
+          <UserInfo />
+        </div>
       </nav>
     </header>
   );

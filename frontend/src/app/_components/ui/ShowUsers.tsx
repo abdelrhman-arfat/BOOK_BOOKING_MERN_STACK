@@ -5,13 +5,20 @@ import { TUser } from "@/app/types/User";
 import UserCardSkeleton from "../loaders/UserCardSkeleton";
 import { useState } from "react";
 import PageBtn from "./PageBtn";
+import Link from "next/link";
 
 const ShowUsers = () => {
   const [page, setPage] = useState<number>(1);
   const getUsers = useGetAllUsersQuery(page);
-
   if (getUsers.isError) {
-    return <div>You Do not have the access to get any user</div>;
+    return (
+      <div className="text-center mt-3 rounded-md bg-gray-100 shadow-sm h-[200px] flex flex-col gap-3 items-center justify-center w-full">
+        <h1 className="text-xl text-red-500 sm:text-2xl ">
+          You Do not have the access to get any user
+        </h1>
+        <Link href="/login">Login</Link>
+      </div>
+    );
   }
   return (
     <>
@@ -20,17 +27,17 @@ const ShowUsers = () => {
           refetch={getUsers.refetch}
           totalPages={getUsers?.data?.totalPages || 1}
           page={page}
-          isIncrement={true}
+          isIncrement={false}
           func={setPage}
-          text="Next"
+          text="Pervious"
         />
         <PageBtn
           refetch={getUsers.refetch}
           totalPages={getUsers?.data?.totalPages || 1}
           page={page}
-          isIncrement={false}
+          isIncrement={true}
           func={setPage}
-          text="Pervious"
+          text="Next"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:gap-2 mt-3 w-full">
@@ -43,6 +50,7 @@ const ShowUsers = () => {
               <UserCardSkeleton />
             </div>
           ))}
+
         {getUsers &&
           getUsers?.data?.data?.results?.map((user: TUser) => (
             <div key={user._id}>

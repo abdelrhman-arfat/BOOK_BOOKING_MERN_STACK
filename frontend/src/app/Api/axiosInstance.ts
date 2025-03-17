@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 const API_URL = "http://localhost:3003/api/";
 
 export const app = axios.create({
@@ -8,4 +7,3 @@ export const app = axios.create({
   withCredentials: true,
   validateStatus: (status) => status >= 200 && status < 600,
 });
-

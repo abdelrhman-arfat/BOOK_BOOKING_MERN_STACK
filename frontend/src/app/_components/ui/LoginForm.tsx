@@ -69,7 +69,7 @@ const LoginForm = () => {
         draggable: true,
       }).then(() => {
         if (user.role !== userRoles.USER) {
-          return router.replace("/admin/dashboard");
+          return router.replace("/admin/products");
         }
 
         router.replace("/");
@@ -158,7 +158,7 @@ const LoginForm = () => {
           <p className="text-sm font-light text-gray-500 dark:text-gray-400">
             Don’t have an account yet?{" "}
             <Link
-              href="/register"
+              href="/sign-up"
               className="font-medium text-blue-600 hover:underline dark:text-blue-500"
             >
               Sign up

@@ -1,12 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
-import { userRouter } from "./routes/users.routes.js";
 import { connectToDB } from "./db/connectToDB.js";
 import { ErrorHandler } from "./middleware/ErrorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { productRouter } from "./routes/product.routes.js";
-// import { productRouter } from "./routes/product.routes.js";
+import { userRouter } from "./routes/users.routes.js";
+import { favRouter } from "./routes/fav.routes.js";
 
 dotenv.config();
 
@@ -48,7 +48,8 @@ app.use("/api/users", userRouter);
 // 2 - products
 app.use("/api/products", productRouter);
 
-// app.use("/api/products", productRouter);
+// // 3 - favorites
+app.use("/api/favorites", favRouter);
 
 // ------------------------------------------- endpoints ----------------------------------------
 

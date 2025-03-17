@@ -2,38 +2,50 @@
 import { logout, setCredentials } from "@/app/_RTK/redux-slices/authSlice";
 import { app } from "@/app/Api/axiosInstance";
 import { useAppDispatch } from "@/app/hooks/AppDispatch";
-import useUserSelector from "@/app/hooks/AppSelectors";
-import { useEffect } from "react";
-// import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
+import Swal from "sweetalert2";
 
 const RefreshToken = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const userInfo = useUserSelector();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const refreshAuthToken = useCallback(async () => {
+    try {
+      const response = await app.post("users/refresh");
+      if (response.status === 200 && response.data?.data?.results) {
+        dispatch(setCredentials(response.data.data.results));
+      } else {
+        throw new Error("Invalid response");
+      }
+    } catch {
+      dispatch(logout());
+      Swal.fire({
+        title: "Authentication Failed",
+        text: "Please login again",
+        icon: "error",
+        confirmButtonText: "Okay",
+        draggable: false,
+        timer: 3000,
+        timerProgressBar: true,
+      }).then(() => {
+        router.push("/login");
+      });
+    }
+  }, [dispatch, router]);
 
   useEffect(() => {
-    const handler = setInterval(async () => {
-      try {
-        app
-          .post("users/refresh")
-          .then((response) => {
-            if (response.status !== 200) {
-              dispatch(logout());
-              return;
-            }
-            dispatch(setCredentials(response.data.data.results));
-            return;
-          })
-          .catch(() => {
-            dispatch(logout());
-          });
-      } catch {
-        console.log("Failed to refresh token");
-      }
-    }, 1000 * 60 * 10); // after 10 minutes .
+    refreshAuthToken();
 
-    return () => clearInterval(handler);
-  }, [dispatch, userInfo]);
-  return <></>;
+    intervalRef.current = setInterval(refreshAuthToken, 1000 * 60 * 10); // Refresh every 10 minutes
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [refreshAuthToken]);
+
+  return null;
 };
 
 export default RefreshToken;

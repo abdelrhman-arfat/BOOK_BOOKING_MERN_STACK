@@ -13,14 +13,17 @@ const sendVerificationEmailWhenOrder = async (req, res, next) => {
       createError({ message: "User ID not provided", statusCode: 400 })
     );
   }
-  const user = await User.findById(id);
+  const user = await User.findById(id).select(
+    "-password -__v -profilePicture "
+  );
 
   if (!user) {
     return next(createError({ message: "User not found", statusCode: 404 }));
   }
+  const userObject = user.toObject(); 
 
   const token = await jwt.sign(
-    { userId: user._id, role: user.role },
+    userObject,
     // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
     { expiresIn: "1h" }

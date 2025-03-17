@@ -1,4 +1,5 @@
 import SideBar from "@/app/_components/sidebar/SideBar";
+import IfNotFromAdmins from "@/app/_components/ui/IfNotFromAdmins";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <main className="w-screen flex md:gap-4 items-center ">
+      <IfNotFromAdmins />
       <aside className="bg-green-50 md:w-[190px]">
         <SideBar />
       </aside>

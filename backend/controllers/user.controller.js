@@ -46,7 +46,7 @@ const handleNewUser = async (req, res, next) => {
     const { firstName, lastName, email, confirmPassword, password, role } =
       req.body;
 
-    if ((!firstName || !lastName || !email || !password, !confirmPassword)) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       next(
         createError({ message: "All fields are required", statusCode: 400 })
       );
@@ -69,16 +69,26 @@ const handleNewUser = async (req, res, next) => {
 
     await newUser.save();
 
+    if (!newUser) {
+      return next(
+        createError({ message: "Failed to add user", statusCode: 500 })
+      );
+    }
+
     // ignore sensitive and unimportant data
-    const userResponse = newUser.toObject();
+    const userResponse = JSON.parse(JSON.stringify(newUser));
     delete userResponse.password;
     delete userResponse.__v;
 
-    await sendVerificationEmailWhenSign(userResponse);
+    await sendVerificationEmailWhenSign(newUser);
 
     const token = await createAccessToken(
       {
+        lastName: userResponse.lastName,
+        firstName: userResponse.firstName,
+        isVerified: userResponse.isVerified,
         email: userResponse.email,
+        profilePicture: userResponse.profilePicture,
         role: userResponse.role,
         _id: userResponse._id,
       },
@@ -87,7 +97,11 @@ const handleNewUser = async (req, res, next) => {
 
     const refreshToken = await createRefreshToken(
       {
+        lastName: userResponse.lastName,
+        firstName: userResponse.firstName,
+        isVerified: userResponse.isVerified,
         email: userResponse.email,
+        profilePicture: userResponse.profilePicture,
         role: userResponse.role,
         _id: userResponse._id,
       },
@@ -119,18 +133,14 @@ const handleNewUser = async (req, res, next) => {
       },
       error: null,
     });
+    return;
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({
         message: "This Email is already in use",
       });
     }
-
-    res.status(500).json({
-      message: "Internal Server Error",
-      error,
-      data: null,
-    });
+    next(error);
   }
 };
 
@@ -139,7 +149,7 @@ const verificationEmail = async (req, res, next) => {
   // eslint-disable-next-line no-undef
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-  const user = await User.findByIdAndUpdate(decoded.userId, {
+  const user = await User.findByIdAndUpdate(decoded._id, {
     isVerified: true,
   });
 
@@ -153,13 +163,11 @@ const verificationEmail = async (req, res, next) => {
 
   await user.save();
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      data: { results: userResponse },
-      message: "Email verified! You can now log in.",
-    });
+  res.status(200).json({
+    success: true,
+    data: { results: userResponse },
+    message: "Email verified! You can now log in.",
+  });
 };
 // when login or when refresh token expired
 const handleLogin = async (req, res, next) => {
@@ -202,8 +210,11 @@ const handleLogin = async (req, res, next) => {
 
   const token = await createAccessToken(
     {
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       _id: user._id,
+      profilePicture: user.profilePicture,
       role: user.role,
       isVerified: user.isVerified,
     },
@@ -212,8 +223,12 @@ const handleLogin = async (req, res, next) => {
 
   const refreshToken = await createRefreshToken(
     {
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       _id: user._id,
+      profilePicture: user.profilePicture,
+
       role: user.role,
       isVerified: user.isVerified,
     },
@@ -224,7 +239,7 @@ const handleLogin = async (req, res, next) => {
     httpOnly: true,
     // eslint-disable-next-line no-undef
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    sameSite: "lax",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
   });
@@ -233,7 +248,7 @@ const handleLogin = async (req, res, next) => {
     httpOnly: true,
     // eslint-disable-next-line no-undef
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    sameSite: "lax",
     path: "/",
     maxAge: 15 * 60 * 1000, // 15 min
   });
@@ -254,7 +269,6 @@ const handleLogin = async (req, res, next) => {
 };
 
 const handleLogOut = (req, res) => {
-  // clear cookies in the perv middleware in user.routes.js
   res.status(200).json({ success: true, message: "Logout successful" });
 };
 
@@ -288,9 +302,12 @@ const refreshToken = async (req, res, next) => {
   }
   const token = await createAccessToken(
     {
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
-      role: user.role,
+      profilePicture: user.profilePicture,
       _id: user._id,
+      role: user.role,
       isVerified: user.isVerified,
     },
     next
@@ -300,7 +317,7 @@ const refreshToken = async (req, res, next) => {
     httpOnly: true,
     // eslint-disable-next-line no-undef
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    sameSite: "lax",
     maxAge: 1000 * 60 * 15,
   });
 
@@ -308,7 +325,7 @@ const refreshToken = async (req, res, next) => {
     httpOnly: true,
     // eslint-disable-next-line no-undef
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
+    sameSite: "lax",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
   });
@@ -383,9 +400,10 @@ const handleDeleteUser = async (req, res, next) => {
 
   await user.deleteOne();
 
-  return res
-    .status(200)
-    .json({ message: `User deleted successfully: ${user.email}` });
+  return res.status(200).json({
+    message: `User deleted successfully: ${user.email}`,
+    success: true,
+  });
 };
 
 const handleUpdatePhoto = async (req, res, next) => {

@@ -17,7 +17,7 @@ export const createAccessToken = async (userInfo, next) => {
 
     // eslint-disable-next-line no-undef
     const token = await jwt.sign(userInfo, process.env.JWT_SECRET, {
-      expiresIn: "20m",
+      expiresIn: "15m",
     });
 
     return token;

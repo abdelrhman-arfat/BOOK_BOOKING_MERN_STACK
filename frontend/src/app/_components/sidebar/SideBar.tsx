@@ -22,9 +22,12 @@ const SideBar = () => {
         } md:translate-x-0 duration-300 h-screen border-r  `}
       >
         <div>
-          <h1 className="centered py-3 bg-purple-700 text-center text-white duration-300 shadow-sm">
-            Logo
-          </h1>
+          <Link
+            href={"/"}
+            className="centered py-3 bg-purple-700 text-center text-white duration-300 shadow-sm"
+          >
+            Home
+          </Link>
         </div>
         <div className="py-0.5 px-1 mt-1 flex flex-col gap-2 sidebar-parent">
           <Link href={"/admin/products"} className="">

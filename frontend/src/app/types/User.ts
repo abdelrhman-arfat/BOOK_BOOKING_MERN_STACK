@@ -1,3 +1,5 @@
+import { TResponse } from "./Response";
+
 export type TUser = {
   firstName: string;
   lastName: string;
@@ -8,14 +10,4 @@ export type TUser = {
   profilePicture: string;
 };
 
-export type TAllUsers = {
-  data: {
-    results: TUser[];
-  };
-  totalPages: number;
-  totalUsers: number;
-  currentPage: number;
-  refetch: () => void;
-};
-
-
+export type TUsers = TResponse<TUser>;

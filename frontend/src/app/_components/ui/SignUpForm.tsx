@@ -11,58 +11,80 @@ const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const newUser = (e: FormEvent<HTMLFormElement>) => {
+
+  const newUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+
     const data = new FormData(e.currentTarget);
-    const firstName = data.get("firstName");
-    const lastName = data.get("lastName");
-    const email = data.get("email");
-    const password = data.get("password");
-    const confirmPassword = data.get("confirmPassword");
-    if (password !== confirmPassword) {
+    const firstName = data.get("firstName") as string;
+    const lastName = data.get("lastName") as string;
+    const email = data.get("email") as string;
+    const password = data.get("password") as string;
+    const confirmPassword = data.get("confirmPassword") as string;
+
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       setIsLoading(false);
       Swal.fire({
-        title: "Password doesn't match",
+        title: "All fields are required",
         icon: "error",
         draggable: false,
       });
       return;
     }
-    app
-      .post("users/register", {
+
+    if (password !== confirmPassword) {
+      setIsLoading(false);
+      Swal.fire({
+        title: "Passwords do not match",
+        icon: "error",
+        draggable: false,
+      });
+      return;
+    }
+
+    try {
+      const res = await app.post("users/register", {
         firstName,
         lastName,
         email,
         password,
         confirmPassword,
-      })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.status !== 200) {
-          Swal.fire({
-            title: res.data.message,
-            text: "Please try again",
-            icon: "error",
-            draggable: false,
-          });
-        }
-        dispatch(setCredentials(res.data.data.results));
-        Swal.fire({
-          title: res.data.message,
-          text: "Please check your email to verify your account",
-
-          icon: "success",
-          draggable: true,
-        }).then(() => {
-          router.replace("/login");
-          return;
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
       });
+
+      setIsLoading(false);
+
+      console.log("Response:", res);
+
+      if (res.status !== 200) {
+        Swal.fire({
+          title: res.data.message || "Registration failed",
+          text: "Please try again",
+          icon: "error",
+          draggable: false,
+        });
+        return;
+      }
+
+      dispatch(setCredentials(res.data.data.results));
+
+      Swal.fire({
+        title: res.data.message,
+        text: "Please check your email to verify your account",
+        icon: "success",
+        draggable: true,
+      }).then(() => {
+        router.push("/login");
+      });
+    } catch {
+      setIsLoading(false);
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong!",
+        icon: "error",
+        draggable: false,
+      });
+    }
   };
 
   return (
@@ -100,7 +122,7 @@ const SignUpForm = () => {
           <input
             required
             name="email"
-            type="text"
+            type="email"
             className="bg-slate-100 w-full text-slate-800 text-sm px-4 py-3 rounded focus:bg-transparent outline-blue-500 transition-all"
             placeholder="Enter email"
           />

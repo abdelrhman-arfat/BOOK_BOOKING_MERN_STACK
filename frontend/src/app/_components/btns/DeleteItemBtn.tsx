@@ -14,8 +14,10 @@ const swalWithBootstrapButtons = Swal.mixin({
 const DeleteUserBtn = ({
   refetch,
   id,
+  text,
 }: {
   refetch: () => void;
+  text: string;
   id: string;
 }) => {
   const handelDeleteUser = () => {
@@ -33,7 +35,7 @@ const DeleteUserBtn = ({
       })
       .then((result) => {
         if (result.isConfirmed) {
-          app.delete(`users/${id}`).then((res) => {
+          app.delete(`${text}s/${id}`).then((res) => {
             if (res.status === 200) {
               swalWithBootstrapButtons.fire({
                 title: "Deleted!",
@@ -45,7 +47,7 @@ const DeleteUserBtn = ({
             }
             swalWithBootstrapButtons.fire({
               title: "Wrong!",
-              text: "You can't delete this user.",
+              text: `You can't delete this ${text}.`,
               icon: "error",
             });
           });

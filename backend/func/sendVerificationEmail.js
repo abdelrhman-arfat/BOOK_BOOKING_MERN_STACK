@@ -1,18 +1,23 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+
 dotenv.config();
 
 const sendVerificationEmailWhenSign = async (user) => {
-  
+  const userResponse = user._doc ? { ...user._doc } : { ...user };
+
+  delete userResponse.password;
+  delete userResponse.__v;
+
   const token = await jwt.sign(
-    { userId: user._id, role: user.role },
+    userResponse,
     // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
 
-  const transporter = nodemailer.createTransport({
+  const transporter = await nodemailer.createTransport({
     service: "Gmail",
     auth: {
       // eslint-disable-next-line no-undef
@@ -25,7 +30,7 @@ const sendVerificationEmailWhenSign = async (user) => {
   // eslint-disable-next-line no-undef
   const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
-  transporter.sendMail({
+  await transporter.sendMail({
     // eslint-disable-next-line no-undef
     from: `"Book Store" <${process.env.EMAIL_USER}>`,
     to: user.email,
