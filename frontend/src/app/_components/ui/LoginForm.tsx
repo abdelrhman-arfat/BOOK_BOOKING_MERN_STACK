@@ -33,7 +33,7 @@ const LoginForm = () => {
       if (!res.data.success) {
         Swal.fire({
           title: "Wrong",
-          text: data.message,
+          text: res.data.message || "Wrong, please try again",
           icon: "error",
           draggable: false,
         });
@@ -53,7 +53,7 @@ const LoginForm = () => {
           app.post(`users/send-verification-email/${user._id}`).then((res) => {
             Swal.fire({
               title: "Verification Email Sent",
-              text: res?.data.message,
+              text: res?.data.message || "Verification Email Sent",
               icon: "success",
               draggable: false,
             });
@@ -69,8 +69,31 @@ const LoginForm = () => {
         draggable: true,
       }).then(() => {
         if (user.role !== userRoles.USER) {
-          return router.replace("/admin/products");
+          Swal.fire({
+            title: "Loading...",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+            timer: 1000,
+          });
+
+          router.replace("/admin/products");
+          return;
         }
+
+        Swal.fire({
+          title: "Loading...",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          timer: 1000,
+        });
 
         router.replace("/");
       });
@@ -91,7 +114,7 @@ const LoginForm = () => {
 
       Swal.fire({
         title: "Wrong",
-        text: errorMessage,
+        text: errorMessage || "Something went wrong",
         icon: "error",
         draggable: false,
       });

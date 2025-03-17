@@ -2,12 +2,9 @@
 import { logout, setCredentials } from "@/app/_RTK/redux-slices/authSlice";
 import { app } from "@/app/Api/axiosInstance";
 import { useAppDispatch } from "@/app/hooks/AppDispatch";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
-import Swal from "sweetalert2";
 
 const RefreshToken = () => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -21,19 +18,8 @@ const RefreshToken = () => {
       }
     } catch {
       dispatch(logout());
-      Swal.fire({
-        title: "Authentication Failed",
-        text: "Please login again",
-        icon: "error",
-        confirmButtonText: "Okay",
-        draggable: false,
-        timer: 3000,
-        timerProgressBar: true,
-      }).then(() => {
-        router.push("/login");
-      });
     }
-  }, [dispatch, router]);
+  }, [dispatch]);
 
   useEffect(() => {
     refreshAuthToken();

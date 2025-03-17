@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getAllUsers,
+  handelChangePassword,
   handelChangeRole,
   handleDeleteUser,
   handleLogin,
@@ -30,6 +31,7 @@ router
     accessForVerified,
     asyncWrapper(getAllUsers)
   )
+  .post("/change-password", tokenVerify, asyncWrapper(handelChangePassword))
   .patch("/verify-email", asyncWrapper(verificationEmail))
   .post("/register", asyncWrapper(handleNewUser))
   .post("/login", loginValidator, asyncWrapper(handleLogin))

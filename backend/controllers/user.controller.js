@@ -564,8 +564,60 @@ const handelChangeRole = async (req, res, next) => {
     },
   });
 };
+const handelChangePassword = async (req, res, next) => {
+  const userReq = req.user;
+  const { email, oldPassword, newPassword } = req.body;
 
+  if (!email || !oldPassword || !newPassword) {
+    return next(
+      createError({
+        message: "Email or password not provided",
+        statusCode: 400,
+      })
+    );
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    return next(
+      createError({
+        message: "User not found",
+        statusCode: 404,
+      })
+    );
+  }
+
+  if (user._id.toString() !== userReq._id.toString()) {
+    return next(
+      createError({
+        message: "You can't change others passwords",
+        statusCode: 403,
+      })
+    );
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    return next(
+      createError({
+        message: "Incorrect password",
+        statusCode: 401,
+      })
+    );
+  }
+
+  const newHashPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = newHashPassword;
+  await user.save();
+
+  res.status(200).json({
+    message: "Password updated successfully",
+    success: true,
+  });
+};
 export {
+  handelChangePassword,
   handleUpdatePhoto,
   getAllUsers,
   handleDeleteUser,
