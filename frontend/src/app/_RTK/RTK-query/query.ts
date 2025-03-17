@@ -2,11 +2,11 @@ import { TBooks } from "@/app/types/Book";
 import { TAllFav } from "@/app/types/Fav";
 import { TUsers } from "@/app/types/User";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const userData = createApi({
   reducerPath: "users",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3003/api/",
+    baseUrl: API_URL,
     credentials: "include",
   }),
   endpoints: (build) => ({
