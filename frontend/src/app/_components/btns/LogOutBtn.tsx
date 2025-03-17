@@ -1,4 +1,5 @@
 import { logout } from "@/app/_RTK/redux-slices/authSlice";
+import { userData } from "@/app/_RTK/RTK-query/query";
 import { app } from "@/app/Api/axiosInstance";
 import { useAppDispatch } from "@/app/hooks/AppDispatch";
 import React, { SetStateAction } from "react";
@@ -31,6 +32,12 @@ const LogOutBtn = ({
               return;
             }
             dispatch(logout());
+            dispatch(
+              userData.util.invalidateTags([
+                { type: "Users", id: "LIST" },
+                { type: "Favorites", id: "LIST" },
+              ])
+            );
           })
           .catch(() => {
             setIsLoading(false);

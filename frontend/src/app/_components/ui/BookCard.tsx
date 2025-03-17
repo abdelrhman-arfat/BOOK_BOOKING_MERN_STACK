@@ -80,7 +80,15 @@ const BookCard = ({
               onClick={() => {
                 app
                   .post(`favorites/${book._id}`)
-                  .then(() => {
+                  .then((res) => {
+                    if (res.status !== 200) {
+                      Toast.fire({
+                        icon: "error",
+                        title: "Failed to add to favorite ",
+                        text: "login first and try again",
+                      });
+                      return;
+                    }
                     refetchFav();
                     refetchBooks();
                     Toast.fire({
