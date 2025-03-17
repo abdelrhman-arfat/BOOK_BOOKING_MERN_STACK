@@ -32,12 +32,7 @@ const LogOutBtn = ({
               return;
             }
             dispatch(logout());
-            dispatch(
-              userData.util.invalidateTags([
-                { type: "Users", id: "LIST" },
-                { type: "Favorites", id: "LIST" },
-              ])
-            );
+            dispatch(userData.util.invalidateTags(["Users", "Favorites"]));
           })
           .catch(() => {
             setIsLoading(false);
