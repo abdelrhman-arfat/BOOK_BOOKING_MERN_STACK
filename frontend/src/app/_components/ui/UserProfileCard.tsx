@@ -90,47 +90,9 @@ const UserProfileCard = () => {
               });
             }
           }}
-          className="px-4 rounded-2xl py-2 bg-neutral-400 text-white"
+          className="px-4 rounded-2xl py-2 hover:bg-neutral-300 duration-200 bg-neutral-400 text-white"
         >
           Change Password
-        </button>
-        <button
-          onClick={() => {
-            Swal.fire({
-              title: "Do you want to delete your account?",
-              showDenyButton: true,
-              showCancelButton: true,
-              confirmButtonText: "Yes",
-              denyButtonText: `No`,
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                const res = await app.delete(`users/${userLogin?.user?._id}`);
-                if (res.status !== 200) {
-                  Swal.fire({
-                    title: "Failed to delete account",
-                    text:
-                      res.data.message ||
-                      "Failed to delete account. Please try again.",
-                    icon: "error",
-                    draggable: false,
-                  });
-                  return;
-                }
-                Swal.fire({
-                  title: "Deleted Successfully",
-                  text: "Account deleted successfully.",
-                  icon: "success",
-                  draggable: true,
-                  timer: 1500,
-                  timerProgressBar: true,
-                });
-              } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
-              }
-            });
-          }}
-        >
-          Delete My Account
         </button>
       </div>
     </div>
