@@ -111,7 +111,7 @@ const handleNewUser = async (req, res, next) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "Strict",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
     });
@@ -119,7 +119,7 @@ const handleNewUser = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "Strict",
       path: "/",
       maxAge: 15 * 60 * 1000, // 15 min
     });
@@ -191,7 +191,7 @@ const verificationEmail = async (req, res, next) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Strict",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
   });
@@ -199,7 +199,7 @@ const verificationEmail = async (req, res, next) => {
   res.cookie("token", accessToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Strict",
     path: "/",
     maxAge: 15 * 60 * 1000, // 15 min
   });
@@ -241,8 +241,16 @@ const handleLogin = async (req, res, next) => {
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    res.clearCookie("token");
-    res.clearCookie("refreshToken");
+    res.clearCookie("token", {
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    res.clearCookie("refreshToken", {
+      secure: true,
+      httpOnly: true,
+      sameSite: "Strict",
+    });
     return res.status(401).json({
       success: false,
       message: "Invalid email or password",
@@ -279,7 +287,7 @@ const handleLogin = async (req, res, next) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Strict",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
   });
@@ -287,7 +295,7 @@ const handleLogin = async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Strict",
     path: "/",
     maxAge: 15 * 60 * 1000, // 15 min
   });
@@ -355,16 +363,16 @@ const refreshToken = async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Strict",
     path: "/",
     maxAge: 1000 * 60 * 15,
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    // eslint-disable-next-line no-undef
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    // secure: process.env.NODE_ENV === "production",
+    secure: true,
+    sameSite: "Strict",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 * 24hours = 7days
   });
