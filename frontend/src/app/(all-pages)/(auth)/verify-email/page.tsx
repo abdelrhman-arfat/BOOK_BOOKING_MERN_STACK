@@ -32,7 +32,6 @@ const Page = () => {
           });
         }
 
-        console.log(res.data.data.results);
         setMessage(res.data.message);
         dispatch(setCredentials(res.data.data.results));
 
