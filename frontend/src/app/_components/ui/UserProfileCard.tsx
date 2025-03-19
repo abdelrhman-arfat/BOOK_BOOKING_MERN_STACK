@@ -96,6 +96,7 @@ const UserProfileCard = () => {
           Change Password
         </button>
         <button
+          className="px-4 my-1 rounded-2xl py-2 hover:bg-red-300 duration-200 bg-red-400 text-white"
           onClick={() => {
             Swal.fire({
               title: "Do you want delete your account?",
