@@ -3,11 +3,12 @@
 import { app } from "@/app/Api/axiosInstance";
 import useUserSelector from "@/app/hooks/AppSelectors";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 const UserProfileCard = () => {
   const userLogin = useUserSelector();
-
+  const router = useRouter();
   if (!userLogin.isAuthenticated) {
     return (
       <div className="w-full flex-col gap-3 h-full centered">
@@ -93,6 +94,48 @@ const UserProfileCard = () => {
           className="px-4 rounded-2xl py-2 hover:bg-neutral-300 duration-200 bg-neutral-400 text-white"
         >
           Change Password
+        </button>
+        <button
+          onClick={() => {
+            Swal.fire({
+              title: "Do you want delete your account?",
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              denyButtonText: `No`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                app.delete(`users/${userLogin?.user?._id}`).then((res) => {
+                  if (res.status !== 200) {
+                    Swal.fire({
+                      title: "Failed to delete account",
+                      text:
+                        res.data.message ||
+                        "Failed to delete account. Please try again.",
+                      icon: "error",
+                      draggable: false,
+                    });
+                    return;
+                  }
+                });
+
+                Swal.fire({
+                  title: "Deleted Successfully",
+                  text: "Account deleted successfully.",
+                  icon: "success",
+                  draggable: true,
+                  timer: 2000,
+                }).then(() => {
+                  router.replace("/");
+                  return;
+                });
+              } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+              }
+            });
+          }}
+        >
+          Delete my Account
         </button>
       </div>
     </div>
