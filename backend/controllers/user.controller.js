@@ -406,8 +406,7 @@ const handleDeleteUser = async (req, res, next) => {
     return next(createError({ message: "User not found", statusCode: 404 }));
   }
 
-  // delete him self until if the role is admin or super admin or leader
-  if (user._id.toString() === userReq._id.toString()) {
+  if (user._id.equals(userReq._id)) {
     await user.deleteOne();
     return res
       .status(200)
