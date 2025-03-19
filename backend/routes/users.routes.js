@@ -35,7 +35,7 @@ router
   .patch("/verify-email", asyncWrapper(verificationEmail))
   .post("/register", asyncWrapper(handleNewUser))
   .post("/login", loginValidator, asyncWrapper(handleLogin))
-  .post("/logout", tokenVerify, deleteTokens, asyncWrapper(handleLogOut))
+  .post("/logout", deleteTokens, asyncWrapper(handleLogOut))
   .post("/refresh", asyncWrapper(refreshToken))
   .post(
     "/:user_id",
