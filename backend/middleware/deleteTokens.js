@@ -1,11 +1,11 @@
 export const deleteTokens = async (req, res, next) => {
   res.clearCookie("token", {
-    sameSite: "Lax",
+    sameSite: "None",
     secure: true,
     httpOnly: true,
   });
   res.clearCookie("refreshToken", {
-    sameSite: "Lax",
+    sameSite: "None",
     secure: true,
     httpOnly: true,
   });
