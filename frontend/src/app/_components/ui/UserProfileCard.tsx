@@ -118,17 +118,17 @@ const UserProfileCard = () => {
                     });
                     return;
                   }
-                });
 
-                Swal.fire({
-                  title: "Deleted Successfully",
-                  text: "Account deleted successfully.",
-                  icon: "success",
-                  draggable: true,
-                  timer: 2000,
-                }).then(() => {
-                  router.replace("/");
-                  return;
+                  Swal.fire({
+                    title: "Deleted Successfully",
+                    text: "Account deleted successfully.",
+                    icon: "success",
+                    draggable: true,
+                    timer: 2000,
+                  }).then(() => {
+                    router.replace("/");
+                    return;
+                  });
                 });
               } else if (result.isDenied) {
                 Swal.fire("Changes are not saved", "", "info");
