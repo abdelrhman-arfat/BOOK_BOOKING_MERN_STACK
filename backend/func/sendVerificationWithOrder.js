@@ -13,28 +13,11 @@ const sendVerificationEmailWhenOrder = async (req, res, next) => {
       createError({ message: "User ID not provided", statusCode: 400 })
     );
   }
-<<<<<<< HEAD
   const user = await User.findById(id).select("-password -__v  ");
-=======
-<<<<<<< HEAD
-  const user = await User.findById(id).select(
-    "-password -__v"
-  );
-=======
-  const user = await User.findById(id).select("-password -__v  ");
->>>>>>> fa5d7e5 (verfiy email issue)
->>>>>>> b1bf7cc (Save my changes)
 
   if (!user) {
     return next(createError({ message: "User not found", statusCode: 404 }));
   }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-   
-=======
->>>>>>> fa5d7e5 (verfiy email issue)
->>>>>>> b1bf7cc (Save my changes)
 
   const token = await jwt.sign(
     user,
