@@ -28,16 +28,6 @@ app.use(
   })
 );
 
-// ------------------------------------------- DB_connection ----------------------------------------
-(async function () {
-  try {
-    await connectToDB();
-  } catch {
-    // eslint-disable-next-line no-undef
-    process.exit(1);
-  }
-})();
-// ------------------------------------------- DB_connection ----------------------------------------
 
 // ------------------------------------------- endpoints ----------------------------------------
 
@@ -66,4 +56,5 @@ app.all("*", (_, res) => {
 
 app.listen(port, () => {
   console.log("server is listening on port" + port);
+  connectToDB();
 });
